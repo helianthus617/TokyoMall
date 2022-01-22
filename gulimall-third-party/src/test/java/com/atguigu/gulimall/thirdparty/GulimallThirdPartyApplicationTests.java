@@ -4,6 +4,9 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSClientBuilder;
 
+import com.atguigu.gulimall.thirdparty.component.SmsComponent;
+import com.atguigu.gulimall.thirdparty.util.HttpUtils;
+import org.apache.http.HttpResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /*此处测试和其他模块导入的jar包不同*/
@@ -48,6 +53,39 @@ public class GulimallThirdPartyApplicationTests {
 //bug.jpg 对象名
         ossClient.shutdown();
         System.out.println("上传完成...");
+    }
+
+
+    @Test
+    public void testsm() {
+        String host = "https://jnlzsms.market.alicloudapi.com";
+        String path = "/lundroid/smsSend";
+        String method = "GET";
+        String appcode = "304e22bb4ded4c6d812c40133ff41b0c";
+        Map<String, String> headers = new HashMap<String, String>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appcode);
+        Map<String, String> querys = new HashMap<String, String>();
+        querys.put("mobile", "15136938718");
+        querys.put("param", "1234");
+        querys.put("templateId", "SMS_75800186");
+
+        try {
+            HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
+            System.out.println(response.toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Autowired
+    SmsComponent smsComponent;
+
+    @Test
+    public void testsm1() {
+        smsComponent.sendSmsCode("15136938718", "1223");
     }
 
 }

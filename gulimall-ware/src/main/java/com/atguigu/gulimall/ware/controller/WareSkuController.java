@@ -1,20 +1,22 @@
 package com.atguigu.gulimall.ware.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.atguigu.common.exception.NoStockException;
+import com.atguigu.gulimall.ware.vo.SkuHasStockVo;
+import com.atguigu.gulimall.ware.vo.WareSkuLockVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.atguigu.gulimall.ware.entity.WareSkuEntity;
 import com.atguigu.gulimall.ware.service.WareSkuService;
 import com.atguigu.common.utils.PageUtils;
 import com.atguigu.common.utils.R;
+
+import static com.atguigu.common.exception.BizCodeEnum.NO_STOCK_EXCEPTION;
 
 
 /**
@@ -30,6 +32,31 @@ public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
 
+    @PostMapping(value = "/lock/order")
+    public R orderLockStock(@RequestBody WareSkuLockVo vo) {
+        try {
+            boolean lockStock = wareSkuService.orderLockStock(vo);
+            return R.ok().setData(lockStock);
+        } catch (NoStockException e) {
+            return R.error(NO_STOCK_EXCEPTION.getCode(), NO_STOCK_EXCEPTION.getMsg());
+        }
+    }
+
+    /**
+     * 查询sku是否有库存
+     *
+     * @return
+     */
+    @PostMapping(value = "/hasStock")
+    public R getSkuHasStock(@RequestBody List<Long> skuIds) {
+
+        //skuId stock
+        List<SkuHasStockVo> vos = wareSkuService.getSkuHasStock(skuIds);
+
+        return R.ok().setData(vos);
+
+    }
+
     /**
      * 列表
      */
@@ -41,6 +68,12 @@ public class WareSkuController {
         return R.ok().put("page", page);
     }
 
+    @PostMapping("/hasstock")
+    public R getSkusHasStock(@RequestBody List<Long> skuIds) {
+        List<SkuHasStockVo> vos = wareSkuService.getSkusHasStock(skuIds);
+
+        return R.ok().setData(vos);
+    }
 
     /**
      * 信息

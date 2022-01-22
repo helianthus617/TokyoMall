@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient("gulimall-coupon")
 public interface CouponFeignService {
-
-
     /**
      * 1、CouponFeignService.saveSpuBounds(spuBoundTo);
      * 1）、@RequestBody将这个对象转为json。

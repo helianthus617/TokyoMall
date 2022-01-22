@@ -45,9 +45,22 @@ public class WareOrderTaskDetailEntity implements Serializable {
      * 仓库id
      */
     private Long wareId;
+
+    public WareOrderTaskDetailEntity() {
+    }
+
     /**
      * 1-已锁定  2-已解锁  3-扣减
      */
     private Integer lockStatus;
 
+    public WareOrderTaskDetailEntity(Long id, Long skuId, String skuName, Integer skuNum, Long taskId, Long wareId, Integer lockStatus) {
+        this.id = id;
+        this.skuId = skuId;
+        this.skuName = skuName;
+        this.skuNum = skuNum;
+        this.taskId = taskId;
+        this.wareId = wareId;
+        this.lockStatus = lockStatus;
+    }
 }

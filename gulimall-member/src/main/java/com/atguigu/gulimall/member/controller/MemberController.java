@@ -1,16 +1,19 @@
 package com.atguigu.gulimall.member.controller;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.atguigu.common.exception.BizCodeEnum;
+import com.atguigu.common.to.SocialUserInfoTo;
+import com.atguigu.gulimall.member.exception.PhoneExistException;
+import com.atguigu.gulimall.member.exception.UsernameExistException;
 import com.atguigu.gulimall.member.feign.CouponFeignService;
+import com.atguigu.gulimall.member.vo.MemberLoginVo;
+import com.atguigu.gulimall.member.vo.MemberRegistVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.atguigu.gulimall.member.entity.MemberEntity;
 import com.atguigu.gulimall.member.service.MemberService;
@@ -44,11 +47,55 @@ public class MemberController {
     }
 
 
+    @PostMapping("/oauth2/login")
+    public R login(@RequestBody SocialUserInfoTo vo) {
+
+        try {
+            MemberEntity login = memberService.login(vo);
+            if (login != null) {
+                return R.ok().setData(login);
+            } else {
+                return R.error(BizCodeEnum.LOGIN_AUTHORIZATION_FAIL.getCode(), BizCodeEnum.LOGIN_AUTHORIZATION_FAIL.getMsg());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(BizCodeEnum.LOGIN_AUTHORIZATION_FAIL.getCode(), BizCodeEnum.LOGIN_AUTHORIZATION_FAIL.getMsg());
+        }
+
+    }
+
+
+    @PostMapping("login")
+    public R login(@RequestBody MemberLoginVo vo) {
+        MemberEntity memberEntity = memberService.login(vo);
+        if (memberEntity != null) {
+            return R.ok().setData(memberEntity);
+        } else {
+            return R.error(BizCodeEnum.LOGIN_ACCOUNT_PASSWORD_INVALID.getCode(),
+                    BizCodeEnum.LOGIN_ACCOUNT_PASSWORD_INVALID.getMsg());
+        }
+    }
+
+
+    @PostMapping("/regist")
+    // @RequiresPermissions("member:member:list")
+    public R regist(@RequestBody MemberRegistVo vo) {
+        try {
+            memberService.regist(vo);
+        } catch (PhoneExistException e) {
+            System.out.println(e.getMessage());
+            return R.error(BizCodeEnum.PHONE_EXISTS_EXCEPTION.getCode(), BizCodeEnum.PHONE_EXISTS_EXCEPTION.getMsg());
+        } catch (UsernameExistException e) {
+            System.out.println(e.getMessage());
+            return R.error(BizCodeEnum.USER_EXISTS_EXCEPTION.getCode(), BizCodeEnum.USER_EXISTS_EXCEPTION.getMsg());
+        }
+        return R.ok();
+    }
+
     @RequestMapping("/list")
     // @RequiresPermissions("member:member:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = memberService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 

@@ -11,6 +11,10 @@ spring:
       oss:
         endpoint: oss-cn-shenzhen.aliyuncs.com
         bucket: helianthusmall
+      sms:
+        host: https://jmsms.market.alicloudapi.com
+        path: /sms/send
+        appcode: 304e22bb4ded4c6d812c40133ff41b0c
 server:
   port: 30000
 

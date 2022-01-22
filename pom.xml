@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
     <groupId>com.atguigu.gulimall</groupId>
     <artifactId>gulimall</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -19,5 +20,14 @@
         <module>gulimall-common</module>
         <module>gulimall-gateway</module>
         <module>gulimall-third-party</module>
+        <module>gulimall-auth-server</module>
+        <module>gulimall-cart</module>
+        <module>gulimall-search</module>
+        <module>oss-server-test</module>
+        <module>oss-client1-test</module>
+        <module>oss-client2-test</module>
+        <module>gulimall-seckill</module>
+
     </modules>
+
 </project>

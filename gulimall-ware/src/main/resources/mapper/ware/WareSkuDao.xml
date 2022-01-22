@@ -14,4 +14,28 @@
     </resultMap>
     <update id="addStock">UPDATE `wms_ware_sku` SET stock=stock+#{skuNum} WHERE sku_id=#{skuId} AND ware_id=#{wareId}
     </update>
+    <update id="lockSkuStock">
+        UPDATE wms_ware_sku
+        SET stock_locked = stock_locked + #{num}
+        WHERE
+        sku_id = #{skuId}
+        AND ware_id = #{wareId}
+        AND stock - stock_locked > 0
+    </update>
+    <update id="unlockStock">
+        UPDATE `wms_ware_sku` SET stock_locked = stock_locked - #{num}
+        WHERE sku_id = #{skuId} AND ware_id = #{wareId}
+    </update>
+    <select id="getSkuStock" resultType="java.lang.Long">
+        SELECT SUM(stock-stock_locked) from `wms_ware_sku` WHERE sku_id=#{sku}
+    </select>
+    <select id="listWareIdHasSkuStock" resultType="java.lang.Long">
+        SELECT
+        ware_id
+        FROM
+        wms_ware_sku
+        WHERE
+        sku_id = #{skuId}
+        AND stock - stock_locked > 0
+    </select>
 </mapper>

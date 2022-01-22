@@ -1,6 +1,10 @@
 server:
   port: 11000
 spring:
+  rabbitmq:
+    host: 192.168.56.10
+    port: 5672
+    virtual-host: /
   application:
     name: gulimall-ware
   cloud:

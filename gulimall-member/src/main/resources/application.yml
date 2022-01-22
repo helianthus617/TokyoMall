@@ -1,6 +1,13 @@
 server:
   port: 8000
 spring:
+  redis:
+    host: 192.168.56.10
+    port: 6379
+  session:
+    store-type: redis
+  thymeleaf:
+    cache: false
   application:
     name: gulimall-member
   datasource:

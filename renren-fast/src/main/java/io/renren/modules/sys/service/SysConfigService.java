@@ -46,14 +46,15 @@ public interface SysConfigService extends IService<SysConfigEntity> {
     /**
      * 根据key，获取配置的value值
      *
-     * @param key           key
+     * @param key key
      */
     public String getValue(String key);
 
     /**
      * 根据key，获取value的Object对象
-     * @param key    key
-     * @param clazz  Object对象
+     *
+     * @param key   key
+     * @param clazz Object对象
      */
     public <T> T getConfigObject(String key, Class<T> clazz);
 

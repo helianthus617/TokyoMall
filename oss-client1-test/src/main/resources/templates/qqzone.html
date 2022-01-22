@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>QQ空间</title>
+</head>
+<body>
+<h1>欢迎:[[${session.loginUser}]]</h1>
+<ul>
+    <li th:each="module:${modules}">
+        查看 <a>[[${module}]]</a>
+    </li>
+</ul>
+</body>
+</html>
